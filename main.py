@@ -1,16 +1,24 @@
 from __future__ import print_function
 from subprocess import call
-from sys import version_info
+from sys import version_info, stderr
+import argparse
+import difflib
 
 
-def get_input(prompt):
-    if version_info < (3, 0):
-        return raw_input(prompt)
-    else:
-        return input(prompt)
+parser = argparse.ArgumentParser()
+parser.add_argument("c", help="path to c source to match")
+parser.add_argument("asm", help="path to your assembly")
+args = parser.parse_args()
 
-cfile = get_input("Enter C file name: ")
+cpath = args.c
+asmpath = args.asm
 
-print("Compiling to Assembly...")
+print("Compiling to Assembly...\n", file=stderr)
+call(["gcc", "-S", "-O0", cpath])
 
-call(["gcc", "-S", "-O0", cfile])
+compiledfile = open(cpath.split('.')[0] + ".s", 'r')
+userfile = open(asmpath, 'r')
+
+diff = difflib.ndiff(compiledfile.readlines(), userfile.readlines())
+delta = ''.join(x[2:] for x in diff if x.startswith('- '))
+print(delta)
