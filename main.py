@@ -13,11 +13,10 @@ def get_input(prompt):
         return input(prompt)
 
 cfile = get_input("Enter C file name: ")
-afile = get_input("Enter Assembly output file name: ")
 
 print("Compiling to Assembly...")
 
-call(["gcc", "-S", "-O0", cfile, "-o", afile])
+call(["gcc", "-S", "-O0", cfile])
 
 stdscr = curses.initscr()
 curses.start_color()
