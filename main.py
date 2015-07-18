@@ -3,7 +3,7 @@ from subprocess import call
 from sys import version_info
 
 def get_input(prompt):
-    if version_info < (3,0):
+    if version_info < (3, 0):
         return raw_input(prompt)
     else:
         return input(prompt)
